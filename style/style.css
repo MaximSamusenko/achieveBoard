@@ -1,0 +1,100 @@
+.fl_l { float: left; }
+.fl_r { float: right; }
+.label {text-align: left; margin-left: 5px; margin-top: 5px; width: 100px;}
+.short_input { width: 105px;}
+.grayButton { margin-top: 10px; width: 110px; border: none; background: gray; min-height: 25px;}
+
+#page {
+  padding: 0px;
+  margin: 0px auto;
+  position: relative;
+  width: 791px;
+}
+#page_header {
+  width: 100%;
+  height: 40px;
+  background: gray;
+}
+#page_body {
+  font-size: 11px;
+  width: 750px;
+ /* padding: 0px 15px 0px 0px;*/
+  padding: 0px;
+}
+#page_footer {
+  line-height: 1.36em;
+  padding: 8px 0px 0px;
+  text-align: center;
+  width: 661px;
+}
+#logon {
+  width:  117px;
+  padding: 3px 0px 0px 9px;
+}
+#frendList {
+  width:  115px;
+  padding: 0px;
+  height: 700px;
+  border: none; /*1px solid gray;*/
+  overflow-x:hidden;
+  overflow-y:initial;
+}
+#frendList li{
+  width: 90px; height: 110px; margin: 5px auto; border: 1px solid black; display: block;
+}
+
+#login_button {
+  margin-top: 10px;
+  width: 110px;
+  border: none;
+  background: gray;
+  height: 25px;
+}
+#main {
+  width: 500px;
+  /*height: 200px;*/
+  border-width: 0px 2px 2px 2px;
+  border-color: gray;
+  border-style: solid;
+}
+#register {
+  margin: 20px auto;
+  position: relative;
+  width: 250px;
+}
+#register_button {
+  margin-top: 10px;
+  width: 110px;
+  border: none;
+  background: gray;
+  height: 25px;
+}
+#register_table {
+  border : none; 
+}
+
+#bigAvatar{
+  width: 100px;
+  height: 120px;
+  }
+#clientInfo{
+  margin: 20px;
+  padding-bottom:10px;
+  border-bottom: 1px solid gray;
+  }
+#userName{
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 20px;
+  font-size: medium;
+  }
+
+#userMenu{
+  width: 115px;
+  padding: 0px;
+  margin-top: 20px;
+  } 
+#achieveList{
+  margin: 10px;
+  }
+

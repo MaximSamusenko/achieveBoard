@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="/AchieveBoard/img/logo.ico?3" />
+
+<META content="text/html; charset=windows-1251" http-equiv="Content-Type">
+<meta name="description" content="Achieve Board пусть все узнаю о твоих длостижениях !" />
+
+<title>Achieve Board</title>
+
+<noscript><meta http-equiv="refresh" content="0; URL=/badbrowser.php"></noscript>
+
+<link rel="stylesheet" type="text/css" href="style/style.css" />
+<script type="javascript" src="js/jquery.js"></script>  
+<script type="text/javascript" src="js/md5.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.3.min.js" ></script>
+<script>
+	function Login()
+	{
+		$.ajax({  
+				type: "GET",  
+				url: "php/Auth.php",  
+				data: { action: "login" , login: $('#login').val(), pass: hex_md5($('#pass').val()) },  
+				success: function(html){  
+					if(html == 'OK')
+					{
+						window.location.href = "index.php";
+					}
+					else
+					{
+						$("#response").html(html);  
+					}
+				}
+				});
+	}
+	
+	function Register()
+	{
+		$.ajax({  
+				type: "GET",  
+				url: "php/Auth.php",  
+				data: { action: "register" , new_login: $('#new_login').val(),new_pass: hex_md5($('#new_pass').val()), invite: $('#invite').val() },  
+				success: function(html){  
+					if(html == 'OK')
+					{
+						window.location.href = "index.php";
+					}
+					else
+					{
+						$("#regresponse").html(html);  
+					}
+				}
+				});
+	}
+</script>
+</head>
+
+<body>
+	<div id="page">
+		<div id = "page_header">
+		</div>
+		<div id = "page_body">
+			<div id="logon" class = "fl_l">
+				<div class="label">Логин</div>
+				<input id="login" type = "text" class="short_input" name = "login"></input>
+				<div class="label">Пароль</div>
+				<input id="pass" type = "password" class="short_input" name = "pass"></input>
+				<div id="response"></div>
+				<button id="login_button" onClick="Login()">Войти</button>
+			</div>
+
+			<div id="main" class = "fl_l">
+				<div id="register">
+					<table id="register_table">
+						<tr>
+							<td><div class="label">Логин</div></td>
+							<td><input id="new_login" type = "text" class="short_input" name = "new_login"></input></td>
+						<tr/>
+						<tr>
+							<td><div class="label">Пароль</div></td>
+							<td><input id="new_pass" type = "text" class="short_input" name = "new_pass"></input></td>
+						<tr/>
+						<tr>
+							<td><div class="label">Код</div></td>
+							<td><input id="invite" type = "text" class="short_input" name = "invite"></input></td>
+						<tr/>
+						<tr>
+							<td></td>
+							<td><button id="register_button" onClick="Register()">Регистрация</button></td>
+						<tr/>
+					</table>
+					<div id="regresponse"></div>
+				</div>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+		<div id = "page_footer">
+		</div>
+	</div>
+</html>
