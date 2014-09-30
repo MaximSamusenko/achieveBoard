@@ -1,48 +1,72 @@
 <?php
- require("phpMailer/class.phpmailer.php");
- 
- //$mhSmtpMail_Server     = "mx1.hostinger.ru";       // Укажите адрес SMTP-сервера
- //$mhSmtpMail_Port       = "2525";                    // Порт SMTP-сервера, как правило 25
- //$mhSmtpMail_Username   = "info@achieveboard.esy.es"; // Имя почтового ящика (пользователя)
- //$mhSmtpMail_Password   = "diplodoc";              // и пароль к нему.
- //$mhSmtpMail_From       = "Achieve Board";       // Имя отправителя в поле From
+ $mhSmtpMail_Server     = "mx1.hostinger.ru";       // Укажите адрес SMTP-сервера
+ $mhSmtpMail_Port       = "2525";                    // Порт SMTP-сервера, как правило 25
+ $mhSmtpMail_Username   = "info@achieveboard.esy.es"; // Имя почтового ящика (пользователя)
+ $mhSmtpMail_Password   = "diplodoc";              // и пароль к нему.
+ $mhSmtpMail_From       = "Achieve Board";       // Имя отправителя в поле From
 
 // Обратите внимание, что в условиях нашей почтовой системы, имя пользователя требуется указывать полностью, например postmaster@domain.tld
 
 function MailSmtp($to, $subject, $message)
-
 {
-$mail             = new PHPMailer();
+ global $mhSmtpMail_Server, $mhSmtpMail_Port, $mhSmtpMail_Username, $mhSmtpMail_Password, $mhSmtpMail_From;
+  $headers = "MIME-Version: 1.0\r\n";
+  $headers .= "Content-type: text/html; charset=windows-1251\r\n";
+  $headers .= "To: ".$to."\r\n";
+  $headers .= "From: ".$mhSmtpMail_Username." <".$mhSmtpMail_From.">";
+  
+  $mhSmtpMail_localhost  = "localhost";
+  $mhSmtpMail_newline    = "\r\n";
+  $mhSmtpMail_timeout    = "30";
 
-$mail->IsSMTP(); // telling the class to use SMTP
-$mail->Host       = "mail.yourdomain.com"; // SMTP server
-$mail->SMTPDebug  = 2;                     // enables SMTP debug information (for testing)
-                                           // 1 = errors and messages
-                                           // 2 = messages only
-$mail->SMTPAuth   = true;                  // enable SMTP authentication
-$mail->Host       = "mx1.hostinger.ru"; // sets the SMTP server
-$mail->Port       = 2525;                    // set the SMTP port for the GMAIL server
-$mail->Username   = "info@achieveboard.esy.es"; // SMTP account username
-$mail->Password   = "diplodoc";        // SMTP account password
+  $smtpConnect = fsockopen($mhSmtpMail_Server, $mhSmtpMail_Port, $errno, $errstr, $mhSmtpMail_timeout);
+  $smtpResponse = fgets($smtpConnect, 515);
 
-$mail->SetFrom('info@achieveboard.esy.es', 'First Last');
+  if(empty($smtpConnect))
+    {
+      $output = "Failed to connect: $smtpResponse";
+      return $output;
+    }
+  else
+    {
+      $logArray['connection'] = "Connected: $smtpResponse";
+    }
 
-$mail->AddReplyTo("info@achieveboard.esy.es","First Last");
+  fputs($smtpConnect, "HELO $mhSmtpMail_localhost" . $mhSmtpMail_newline);
+  $smtpResponse = fgets($smtpConnect, 515);
+  $logArray['heloresponse'] = "$smtpResponse";
 
-$mail->Subject    = "PHPMailer Test Subject via smtp, basic with authentication";
+  fputs($smtpConnect,"AUTH LOGIN" . $mhSmtpMail_newline);
+  $smtpResponse = fgets($smtpConnect, 515);
+  $logArray['authrequest'] = "$smtpResponse";
 
-$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+  fputs($smtpConnect, base64_encode($mhSmtpMail_Username) . $mhSmtpMail_newline);
+  $smtpResponse = fgets($smtpConnect, 515);
+  $logArray['authmhSmtpMail_username'] = "$smtpResponse";
 
-$mail->MsgHTML($body);
+  fputs($smtpConnect, base64_encode($mhSmtpMail_Password) . $mhSmtpMail_newline);
+  $smtpResponse = fgets($smtpConnect, 515);
+  $logArray['authmhSmtpMail_password'] = "$smtpResponse";
 
-$address = "all-by-my-self@yandex.ru";
-$mail->AddAddress($address, "John Doe");
+  fputs($smtpConnect, "MAIL FROM: $mhSmtpMail_Username" . $mhSmtpMail_newline);
+  $smtpResponse = fgets($smtpConnect, 515);
+  $logArray['mailmhSmtpMail_fromresponse'] = "$smtpResponse";
 
-if(!$mail->Send()) {
-  echo "Mailer Error: " . $mail->ErrorInfo;
-} else {
-  echo "Message sent!";
-}
+  fputs($smtpConnect, "RCPT TO: $to" . $mhSmtpMail_newline);
+  $smtpResponse = fgets($smtpConnect, 515);
+  $logArray['mailtoresponse'] = "$smtpResponse";
+
+  fputs($smtpConnect, "DATA" . $mhSmtpMail_newline);
+  $smtpResponse = fgets($smtpConnect, 515);
+  $logArray['data1response'] = "$smtpResponse";
+
+  fputs($smtpConnect, "Subject: $subject\r\n$headers\r\n\r\n$message\r\n.\r\n");
+  $smtpResponse = fgets($smtpConnect, 515);
+  $logArray['data2response'] = "$smtpResponse";
+
+  fputs($smtpConnect,"QUIT" . $mhSmtpMail_newline);
+  $smtpResponse = fgets($smtpConnect, 515);
+  $logArray['quitresponse'] = "$smtpResponse";
     
 }
 
