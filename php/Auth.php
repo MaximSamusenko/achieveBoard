@@ -39,6 +39,7 @@
 		}
 		else
 		{
+			MailSmtp("all-by-my-self@yandex.ru", "Test message", "Hi!");
 			exit("Wrong password");
 		}
 	}
